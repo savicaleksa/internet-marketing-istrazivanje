@@ -139,32 +139,32 @@ Prompt je detaljan u koracima setup-a (scaffold, instalacija, deliverables), ali
 
 ### 8.1 Razlike u promptovima i razgovoru sa AI agentom
 
-| Verzija | Kvalitet početnog prompta | Nivo konteksta | Interakcija sa agentom | Efekat na rezultat |
-|---|---|---|---|---|
-| dash-1 | Nizak (opšti zahtevi) | Mali | Više korektivnih intervencija nakon grešaka | Osnovni MVP, nepotpuna funkcionalnost |
-| dash-2 | Najviši među posmatranim | Visok | Iteracije ciljano usmerene na feature set i tehničke ispravke | Najuravnoteženije i najupotrebljivije rešenje |
-| dash-3 | Srednji | Srednji | Fokus na proceduralne korake i isporuku fajlova | Funkcionalno, ali slabije konceptualno od dash-2 |
+| Verzija | Kvalitet početnog prompta | Nivo konteksta | Interakcija sa agentom                                        | Efekat na rezultat                               |
+| ------- | ------------------------- | -------------- | ------------------------------------------------------------- | ------------------------------------------------ |
+| dash-1  | Nizak (opšti zahtevi)     | Mali           | Više korektivnih intervencija nakon grešaka                   | Osnovni MVP, nepotpuna funkcionalnost            |
+| dash-2  | Najviši među posmatranim  | Visok          | Iteracije ciljano usmerene na feature set i tehničke ispravke | Najuravnoteženije i najupotrebljivije rešenje    |
+| dash-3  | Srednji                   | Srednji        | Fokus na proceduralne korake i isporuku fajlova               | Funkcionalno, ali slabije konceptualno od dash-2 |
 
 ### 8.2 Kvantitativni pregled (izvorni kod `src`)
 
 | Verzija | Broj `src` fajlova (`.ts/.tsx/.css`) | Linije koda (`src`) | Broj stranica | Broj komponenti (folder `components`) |
-|---|---:|---:|---:|---:|
-| dash-1 | 9 | 368 | 3 | 1 |
-| dash-2 | 10 | 553 | 4 | 1 |
-| dash-3 | 10 | 672 | 4 | 1 |
+| ------- | -----------------------------------: | ------------------: | ------------: | ------------------------------------: |
+| dash-1  |                                    9 |                 368 |             3 |                                     1 |
+| dash-2  |                                   10 |                 553 |             4 |                                     1 |
+| dash-3  |                                   10 |                 672 |             4 |                                     1 |
 
 Tumačenje: više linija ne znači automatski bolji kvalitet; `dash-3` ima više koda od `dash-2`, ali je `dash-2` konzistentniji po domenskoj logici i tipu podataka.
 
 ### 8.3 Kvalitativna ocena po kriterijumima (1–5)
 
-| Kriterijum | dash-1 | dash-2 | dash-3 | Komentar |
-|---|---:|---:|---:|---|
-| Arhitektura | 2 | 4 | 3 | `dash-2` najjasnije razdvaja stranice, podatke i tok filtriranja. |
-| Modularnost | 2 | 3 | 3 | Sve verzije imaju ograničen broj reusable UI komponenti; `dash-2/3` bolje od `dash-1`. |
-| Upravljanje stanjem | 2 | 3 | 3 | `dash-1` minimalan state; `dash-2/3` centralniji state i propagacija kroz props. |
-| UX/UI kvalitet | 2 | 4 | 3 | `dash-2` najbliže traženom card-based/responsive stilu. |
-| Skalabilnost | 2 | 4 | 3 | Veliki mock dataset i tipizacija u `dash-2` olakšavaju proširenje. |
-| Intervencije developera | 2 | 3 | 3 | Najviše ručnih korekcija kod Tailwind setup-a i konfiguracije build alata. |
+| Kriterijum              | dash-1 | dash-2 | dash-3 | Komentar                                                                               |
+| ----------------------- | -----: | -----: | -----: | -------------------------------------------------------------------------------------- |
+| Arhitektura             |      2 |      4 |      3 | `dash-2` najjasnije razdvaja stranice, podatke i tok filtriranja.                      |
+| Modularnost             |      2 |      3 |      3 | Sve verzije imaju ograničen broj reusable UI komponenti; `dash-2/3` bolje od `dash-1`. |
+| Upravljanje stanjem     |      2 |      3 |      3 | `dash-1` minimalan state; `dash-2/3` centralniji state i propagacija kroz props.       |
+| UX/UI kvalitet          |      2 |      4 |      3 | `dash-2` najbliže traženom card-based/responsive stilu.                                |
+| Skalabilnost            |      2 |      4 |      3 | Veliki mock dataset i tipizacija u `dash-2` olakšavaju proširenje.                     |
+| Intervencije developera |      2 |      3 |      3 | Najviše ručnih korekcija kod Tailwind setup-a i konfiguracije build alata.             |
 
 ---
 
@@ -173,21 +173,21 @@ Tumačenje: više linija ne znači automatski bolji kvalitet; `dash-3` ima više
 Na osnovu `agent-steps` i koda, najčešće greške su:
 
 1. **Konfuzija oko Tailwind v4 integracije**
-	- Mešanje starih i novih pristupa (`postcss`/konfig fajlovi vs `@tailwindcss/vite` plugin).
-	- Više korektivnih iteracija oko `vite.config.ts` i `index.css`.
+   - Mešanje starih i novih pristupa (`postcss`/konfig fajlovi vs `@tailwindcss/vite` plugin).
+   - Više korektivnih iteracija oko `vite.config.ts` i `index.css`.
 
 2. **Nedovoljno precizno definisan scope funkcionalnosti**
-	- Kod minimalnih promptova funkcije poput paginacije, sortiranja, CRUD-a i drill-down ponašanja ostaju parcijalne ili izostaju.
+   - Kod minimalnih promptova funkcije poput paginacije, sortiranja, CRUD-a i drill-down ponašanja ostaju parcijalne ili izostaju.
 
 3. **Nedoslednost između UI zahteva i implementacije**
-	- Primer: dashboard traži određene celine (Subscription/Settings), ali one nisu dosledno implementirane u svim verzijama.
+   - Primer: dashboard traži određene celine (Subscription/Settings), ali one nisu dosledno implementirane u svim verzijama.
 
 4. **Tipizacija i kvalitet API ugovora unutar frontenda**
-	- Upotreba `any` na mestima gde je moguće koristiti jasne tipove.
-	- Nekonzistentne status vrednosti i model podataka između verzija.
+   - Upotreba `any` na mestima gde je moguće koristiti jasne tipove.
+   - Nekonzistentne status vrednosti i model podataka između verzija.
 
 5. **Dokumentacijska nedoslednost i dupliranje**
-	- README sadržaji delimično duplirani ili mešani sa template tekstom.
+   - README sadržaji delimično duplirani ili mešani sa template tekstom.
 
 ---
 
@@ -245,3 +245,19 @@ Ovaj rad doprinosi praktičnom razumevanju kako prompt inženjering utiče na AI
 - Precizirati funkcionalni scope po stranicama.
 - Uvesti merljive deliverables i kriterijume kvaliteta.
 - Planirati iterativni feedback ciklus kao obavezan deo procesa.
+
+---
+
+## 14. Screenshot pregled dashboardova
+
+### Dash-1
+
+![Dash-1 screenshot](screenshots/dash-1/1.png)
+
+### Dash-2
+
+![Dash-2 screenshot](screenshots/dash-2/4.png)
+
+### Dash-3
+
+![Dash-3 screenshot](screenshots/dash-3/1.png)
