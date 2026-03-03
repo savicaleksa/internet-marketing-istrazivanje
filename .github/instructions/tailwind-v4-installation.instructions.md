@@ -1,5 +1,5 @@
 ---
-description: Describe when these instructions should be loaded
+description: Should be loaded when the user asks the AI agent to install Tailwind CSS v4 and Vite in the project.
 # applyTo: 'Describe when these instructions should be loaded' # when provided, instructions will automatically be added to the request context when the pattern matches an attached file
 ---
 
